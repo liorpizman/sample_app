@@ -4,7 +4,7 @@ gem 'rails', '3.2.16'
 gem 'bootstrap-sass', '2.1'
 
 group :development, :test do
-  gem 'sqlite3', '1.3.5'
+  gem 'sqlite3', '~> 1.4'
   gem 'rspec-rails', '2.11.0'
 
 end
