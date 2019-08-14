@@ -32,21 +32,16 @@ describe "Authentication" do
       end
     end
 
+    describe "as signed-in user " do
+      let(:user) { FactoryGirl.create(:user) }
+      before { sign_in user }
 
-    # describe "as signed-in user " do
-    #   let(:user) { FactoryGirl.create(:user) }
-    #   before { sign_in user }
-    #       describe "cannot access #new action" do
-    #     before { get new_user_path }
-    #     specify { response.should redirect_to(root_path) }
-    #   end
-    #
-    #   describe "cannot access #create action" do
-    #     before { post users_path(user) }
-    #     specify { response.should redirect_to(root_path) }
-    #   end
-    # end
-
+      describe "cannot delete other users' posts" do
+        let(:other_user) { FactoryGirl.create(:user) }
+        before { visit user_path(other_user) }
+        it { should_not have_link('delete') }
+      end
+    end
 
 
     describe "for non-signed-in users" do
@@ -68,7 +63,7 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          fill_in "Email",    with: user.email
+          fill_in "Email", with: user.email
           fill_in "Password", with: user.password
           click_button "Sign in"
         end
@@ -83,7 +78,7 @@ describe "Authentication" do
             before do
               delete signout_path
               visit signin_path
-              fill_in "Email",    with: user.email
+              fill_in "Email", with: user.email
               fill_in "Password", with: user.password
               click_button "Sign in"
             end
@@ -119,7 +114,7 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          fill_in "Email",    with: user.email
+          fill_in "Email", with: user.email
           fill_in "Password", with: user.password
           click_button "Sign in"
         end
@@ -192,7 +187,7 @@ describe "Authentication" do
 
       it { should have_selector('title', text: user.name) }
 
-      it { should have_link('Users',    href: users_path) }
+      it { should have_link('Users', href: users_path) }
       it { should have_link('Profile', href: user_path(user)) }
       it { should have_link('Settings', href: edit_user_path(user)) }
       it { should have_link('Sign out', href: signout_path) }
